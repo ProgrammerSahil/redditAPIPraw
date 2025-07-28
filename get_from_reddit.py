@@ -20,11 +20,19 @@ def queryFromSubreddit(sub, query, limit):
         
         for post in subreddit.search(query, sort="relevance", limit=limit):
 
-            content = {}
+            content = {
+                "title": post.title,
+                "id": post.id,
+                "score": post.score,
+                "author": post.author.name if post.author else "[deleted]",
+                "created_utc": post.created_utc,
+                "flair": post.link_flair_text if post.link_flair_text else "None",
+                "num_comments": post.num_comments,
+                "permalink": f"https://reddit.com{post.permalink}",
+                "content": []
+            }
 
-            content['title'] = post.title
-
-            content['content'] = []
+            content['text'] = post.selftext if post.selftext else "No text content"
 
             if(post.url.endswith(('.jpg', '.jpeg', '.png'))):
                 content['content'].append(post.url)
@@ -49,6 +57,6 @@ def queryFromSubreddit(sub, query, limit):
     return results
 
 
-print(queryFromSubreddit("totalkalesh", "school", 10))
+print(queryFromSubreddit("delhi", "sunset", 3))
     
 
